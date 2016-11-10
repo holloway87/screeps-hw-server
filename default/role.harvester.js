@@ -1,4 +1,4 @@
-var roleHarvester = {
+module.exports = {
     /**
      * @param {Creep} creep
      */
@@ -9,6 +9,7 @@ var roleHarvester = {
                 creep.moveTo(sources[0]);
             }
         } else {
+            //noinspection JSUnusedGlobalSymbols
             var structures = creep.room.find(FIND_STRUCTURES, {
                 /**
                  * @param {Structure} structure
@@ -18,13 +19,16 @@ var roleHarvester = {
                     return STRUCTURE_SPAWN == structure.structureType || STRUCTURE_EXTENSION == structure.structureType;
                 }
             });
-            if (structures.length) {
-                if (ERR_NOT_IN_RANGE == creep.transfer(structures[0], RESOURCE_ENERGY)) {
-                    creep.moveTo(structures[0]);
+            for (var s in structures) {
+                if (!structures.hasOwnProperty(s)) {
+                    continue;
+                }
+                if (structures[s].energy < structures[s].energyCapacity) {
+                    if (ERR_NOT_IN_RANGE == creep.transfer(structures[s], RESOURCE_ENERGY)) {
+                        creep.moveTo(structures[s]);
+                    }
                 }
             }
         }
     }
 };
-
-module.exports = roleHarvester;

@@ -9,9 +9,19 @@ var roleHarvester = {
                 creep.moveTo(sources[0]);
             }
         } else {
-            var spawns = creep.room.find(FIND_MY_SPAWNS);
-            if (ERR_NOT_IN_RANGE == creep.transfer(spawns[0], RESOURCE_ENERGY)) {
-                creep.moveTo(spawns[0]);
+            var structures = creep.room.find(FIND_STRUCTURES, {
+                /**
+                 * @param {Structure} structure
+                 * @returns {boolean}
+                 */
+                filter: function (structure) {
+                    return STRUCTURE_SPAWN == structure.structureType || STRUCTURE_EXTENSION == structure.structureType;
+                }
+            });
+            if (structures.length) {
+                if (ERR_NOT_IN_RANGE == creep.transfer(structures[0], RESOURCE_ENERGY)) {
+                    creep.moveTo(structures[0]);
+                }
             }
         }
     }

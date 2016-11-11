@@ -1,7 +1,7 @@
 module.exports = {
     harvestHighestSource: function(creep) {
         var sources = creep.room.find(FIND_SOURCES);
-        _.sortBy(sources,
+        sources = _.sortBy(sources,
             /** @param {Source} source */
             function (source) {return source.energy;}
         );

@@ -16,7 +16,7 @@ module.exports = {
                     creep.moveTo(targets[0]);
                 }
             } else {
-                targets = creep.room.find(FIND_MY_STRUCTURES, {
+                targets = creep.room.find(FIND_STRUCTURES, {
                     /**
                      * @param {Structure} structure
                      */

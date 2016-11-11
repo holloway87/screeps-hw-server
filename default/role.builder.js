@@ -1,3 +1,5 @@
+var roleBase = require('role.base');
+
 module.exports = {
     /**
      * @param {Creep} creep
@@ -31,10 +33,7 @@ module.exports = {
                 }
             }
         } else {
-            var sources = creep.room.find(FIND_SOURCES);
-            if (ERR_NOT_IN_RANGE == creep.harvest(sources[0])) {
-                creep.moveTo(sources[0]);
-            }
+            roleBase.harvestHighestSource(creep);
         }
     }
 };

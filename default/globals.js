@@ -1,5 +1,5 @@
 module.exports = {
-    maxBuilders: 8,
-    maxHarverster: 2,
+    maxBuilders: 5,
+    maxHarverster: 5,
     maxUpgrader: 10
 };

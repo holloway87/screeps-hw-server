@@ -13,54 +13,37 @@ module.exports.loop = function () {
         }
     }
 
-    var buildersCnt = 0;
-    var harvesterCnt = 0;
-    var upgraderCnt = 0;
-    for (c in Game.creeps) {
-        if (!Game.creeps.hasOwnProperty(c)) {
-            continue;
-        }
-        var creep = Game.creeps[c];
+    var builders = _.filter(Game.creeps,
+        /** @param {Creep} creep */
+        function (creep) {return 'builder' == creep.memory.role;}
+    );
+    var harvesters = _.filter(Game.creeps,
+        /** @param {Creep} creep */
+        function (creep) {return 'harvester' == creep.memory.role;}
+    );
+    var upgraders = _.filter(Game.creeps,
+        /** @param {Creep} creep */
+        function (creep) {return 'upgrader' == creep.memory.role;}
+    );
 
-        switch (creep.memory.role) {
-            case 'builder':
-                buildersCnt++;
-                break;
-            case 'harvester':
-                harvesterCnt++;
-                break;
-            case 'upgrader':
-                upgraderCnt++;
-                break;
-        }
-    }
-
-    if (globals.maxHarverster > harvesterCnt && 200 <= Game.spawns['Spawn1'].energy) {
+    if (globals.maxHarverster > harvesters.length && 200 <= Game.spawns['Spawn1'].energy) {
         Game.spawns['Spawn1'].createCreep([WORK, CARRY, MOVE], null, {role: 'harvester'});
-    }
-    if (globals.maxUpgrader > upgraderCnt && 200 <= Game.spawns['Spawn1'].energy) {
+    } else if (globals.maxUpgrader > upgraders.length && 200 <= Game.spawns['Spawn1'].energy) {
         Game.spawns['Spawn1'].createCreep([WORK, CARRY, MOVE], null, {role: 'upgrader'});
-    }
-    if (globals.maxBuilders > buildersCnt && 200 <= Game.spawns['Spawn1'].energy) {
+    } else if (globals.maxBuilders > builders.length && 200 <= Game.spawns['Spawn1'].energy) {
         Game.spawns['Spawn1'].createCreep([WORK, CARRY, MOVE], null, {role: 'builder'});
     }
 
-    for (c in Game.creeps) {
-        if (!Game.creeps.hasOwnProperty(c)) {
-            continue;
-        }
-        creep = Game.creeps[c];
-
-        switch (creep.memory.role) {
-            case 'builder':
-                roleBuilder.run(creep);
-                break;
-            case 'harvester':
-                roleHarvester.run(creep);
-                break;
-            case 'upgrader':
-                roleUpgrader.run(creep);
-                break;
-        }
-    }
+    _.forEach(builders,
+        /** @param {Creep} creep */
+        function (creep) {roleBuilder.run(creep);}
+    );
+    _.forEach(harvesters,
+        /** @param {Creep} creep */
+        function (creep) {roleHarvester.run(creep);}
+    );
+    _.forEach(upgraders,
+        /** @param {Creep} creep */
+        function (creep) {roleUpgrader.run(creep);}
+    );
 };

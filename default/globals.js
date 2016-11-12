@@ -1,6 +1,6 @@
 module.exports = {
-    maxBuilders: 6,
-    maxHarverster: 7,
+    maxBuilders: 8,
+    maxHarverster: 5,
     maxUpgrader: 7,
     MODE_BUILDING: 'building',
     MODE_HARVESTING: 'harvesting',

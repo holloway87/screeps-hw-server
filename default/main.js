@@ -21,10 +21,10 @@ function updateRoom(room) {
         function (creep) {return globals.ROLE_WORKER == creep.memory.role;}
     );
 
-    if (1050 <= room.energyCapacityAvailable) {
-        if (globals.maxWorker > workers.length && 1050 <= room.energyAvailable) {
+    if (850 <= room.energyCapacityAvailable) {
+        if (globals.maxWorker > workers.length && 850 <= room.energyAvailable) {
             Game.spawns['Spawn1'].createCreep(
-                [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
+                [WORK, WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
                 null, {role: globals.ROLE_WORKER});
         }
     } else {

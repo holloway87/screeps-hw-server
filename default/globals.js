@@ -1,5 +1,5 @@
 module.exports = {
-    maxWorker: 20,
+    maxWorker: 15,
     MODE_BUILDING: 'building',
     MODE_HARVESTING: 'harvesting',
     MODE_REPAIRING: 'repairing',

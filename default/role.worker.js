@@ -57,7 +57,7 @@ var roleWorker = {
 
     /**
      * @param {Room} room
-     * @returns {StructureSpawn[]|StructureExtension[]}
+     * @returns {StructureSpawn[]|StructureExtension[]|StructureTower[]}
      */
     getTransferTargets: function (room) {
         return room.find(FIND_STRUCTURES, {
@@ -66,7 +66,8 @@ var roleWorker = {
              * @returns {boolean}
              */
             filter: function (structure) {
-                return (structure instanceof StructureSpawn || structure instanceof StructureExtension) &&
+                return (structure instanceof StructureSpawn || structure instanceof StructureExtension ||
+                    structure instanceof StructureTower) &&
                     structure.energy < structure.energyCapacity;
             }
         });
@@ -76,7 +77,13 @@ var roleWorker = {
      * @param {Creep} creep
      */
     setBestEnergySource: function (creep) {
-        var sources = creep.room.find(FIND_SOURCES);
+        var sources = creep.room.find(FIND_SOURCES, function (source) {return 0 < source.energy;});
+
+        if (0 == sources.length) {
+            creep.memory.actSource = null;
+        } else if (1 == sources.length) {
+            creep.memory.actSource = sources[0].id;
+        }
 
         var lowestCostSource = 0;
         var lowestCost = null;
@@ -129,7 +136,7 @@ var roleWorker = {
 
     /**
      * @param {Creep} creep
-     * @param {StructureSpawn[]|StructureExtension[]} [targets]
+     * @param {StructureSpawn[]|StructureExtension[]|StructureTower[]} [targets]
      * @returns {string|null}
      */
     setTransferTarget: function (creep, targets) {
@@ -181,6 +188,11 @@ var roleWorker = {
         var source = Game.getObjectById(creep.memory.actSource);
 
         if (!(source instanceof Source)) {
+            roleWorker.setBestEnergySource(creep);
+            source = Game.getObjectById(creep.memory.actSource);
+        }
+
+        if (0 == source.energy) {
             roleWorker.setBestEnergySource(creep);
             source = Game.getObjectById(creep.memory.actSource);
         }
@@ -315,7 +327,9 @@ var roleWorker = {
         var target = Game.getObjectById(creep.memory.actSource);
         var setNextMode = false;
 
-        if (!(target instanceof StructureSpawn || target instanceof StructureExtension)) {
+        if (!(target instanceof StructureSpawn || target instanceof StructureExtension ||
+            target instanceof StructureTower)
+        ) {
             roleWorker.setTransferTarget(creep);
             if (creep.memory.actSource) {
                 target = Game.getObjectById(creep.memory.actSource);
@@ -325,7 +339,12 @@ var roleWorker = {
         }
 
         if (target.energy == target.energyCapacity) {
-            setNextMode = true;
+            roleWorker.setTransferTarget(creep);
+            if (creep.memory.actSource) {
+                target = Game.getObjectById(creep.memory.actSource);
+            } else {
+                setNextMode = true;
+            }
         }
         if (setNextMode) {
             creep.memory.mode = globals.MODE_BUILDING;

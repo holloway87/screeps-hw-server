@@ -1,9 +1,9 @@
 module.exports = {
-    maxBuilders: 8,
-    maxHarverster: 5,
-    maxUpgrader: 7,
+    maxWorker: 20,
     MODE_BUILDING: 'building',
     MODE_HARVESTING: 'harvesting',
+    MODE_REPAIRING: 'repairing',
     MODE_TRANSFERING: 'transfering',
-    MODE_UPGRADING: 'upgrading'
+    MODE_UPGRADING: 'upgrading',
+    ROLE_WORKER: 'worker'
 };

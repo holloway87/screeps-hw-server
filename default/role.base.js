@@ -36,16 +36,16 @@ module.exports = {
             }
         }
 
-        creep.memory.harvestingSource = lowestCostSource;
+        creep.memory.harvestingSource = sources[lowestCostSource].id;
     },
 
     /**
      * @param {Creep} creep
      */
     harvestSourceInMemory: function (creep) {
-        var sources = creep.room.find(FIND_SOURCES);
-        if (ERR_NOT_IN_RANGE == creep.harvest(sources[creep.memory.harvestingSource])) {
-            creep.moveTo(sources[creep.memory.harvestingSource]);
+        var source = Game.getObjectById(creep.memory.harvestingSource);
+        if (ERR_NOT_IN_RANGE == creep.harvest(source)) {
+            creep.moveTo(source);
         }
     }
 };

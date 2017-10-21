@@ -3,6 +3,20 @@
 let roleHarvester = require('role.harvester');
 
 /**
+ * Clean memory.
+ */
+function clearMemory() {
+    for (let c in Memory.creeps) {
+        if (!Memory.creeps.hasOwnProperty(c)) {
+            continue;
+        }
+        if (!Game.creeps[c]) {
+            delete Memory.creeps[c];
+        }
+    }
+}
+
+/**
  * Update one room.
  *
  * @param {Room} room
@@ -27,7 +41,7 @@ function updateRoom(room) {
     }
 
     if (roleHarvester.maxCreeps > harvestersCnt) {
-        let spawns = Game.rooms['W3N8'].find(FIND_MY_SPAWNS);
+        let spawns = room.find(FIND_MY_SPAWNS);
         for (let i = 0; i < spawns.length; i++) {
             if (spawns[i].energy >= roleHarvester.creepEnergyNeeded) {
                 roleHarvester.create(spawns[i]);
@@ -37,6 +51,8 @@ function updateRoom(room) {
 }
 
 module.exports.loop = function () {
+    clearMemory();
+
     for (let name in Game.rooms) {
         if (!Game.rooms.hasOwnProperty(name)) {
             continue;

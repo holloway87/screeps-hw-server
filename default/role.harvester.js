@@ -5,7 +5,7 @@
  *
  * Harvests energy and distributes it to spawns and room controllers.
  *
- * @returns {{run: run}}
+ * @returns {{create: create, creepEnergeyNeeded: number, maxCreeps: number, run: run}}
  * @constructor
  */
 let RoleHarvester = function () {
